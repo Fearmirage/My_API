@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { SalesController } from './sales.controller.js';
-import { SalesService } from './sales.service.js';
+import { SalesService } from './sales.service.js'; //.ts becomes .js locally when ran
 
 @Module({
   controllers: [SalesController],

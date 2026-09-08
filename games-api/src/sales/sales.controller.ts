@@ -4,7 +4,7 @@ import {
     Param,
 } from '@nestjs/common';
 
-import { SalesService } from './sales.service';
+import { SalesService } from './sales.service.js'; //.ts becomes .js locally when ran
 
 @Controller('sales')
 export class SalesController {

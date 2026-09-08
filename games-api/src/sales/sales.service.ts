@@ -10,12 +10,10 @@ export class SalesService {
         const filePath = join(
             process.cwd(),
             'data',
-            'vgsales.json',
+            'sales.json',
         );
-
         const file = readFileSync(filePath, 'utf-8');
         this.sales = JSON.parse(file);
-
     }
 
     findAll() {
@@ -24,7 +22,7 @@ export class SalesService {
 
     findOne(id: number) {
         return this.sales.find(
-            (sales) => sales.id === id,
+        (sales) => sales.id === id,
         );
     }
 }
