@@ -1,8 +1,10 @@
 import {
     Controller,
     Get,
+    Post,
     Param,
     Query,
+    Body,
 } from '@nestjs/common';
 
 import { SalesService } from './sales.service.js'; //.ts becomes .js locally when ran
@@ -24,5 +26,10 @@ export class SalesController {
     @Get(':id')
     findOne(@Param('id') id: string) {
         return this.salesService.findOne(Number(id));
+    }
+
+    @Post()
+    addSale(@Body() sale:any){
+        return this.salesService.addSale(sale)
     }
 }

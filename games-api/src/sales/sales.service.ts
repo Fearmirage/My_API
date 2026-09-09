@@ -52,4 +52,9 @@ export class SalesService {
         (sales) => sales.rank === rank,
         );
     }
+
+    addSale(sale: any){
+        this.sales.push(sale);
+        return sale
+    }
 }
