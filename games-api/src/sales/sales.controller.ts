@@ -3,6 +3,7 @@ import {
     Get,
     Post,
     Patch,
+    Delete,
     Param,
     Query,
     Body,
@@ -38,5 +39,10 @@ export class SalesController {
     @Patch(':rank')
     update(@Param('rank') rank: string, @Body() updated_game: CreateGameDto){
         return this.salesService.update(Number(rank),updated_game)
+    }
+
+    @Delete(':rank')
+    delete(@Param('rank') rank: string) {
+        return this.salesService.delete(Number(rank))
     }
 }

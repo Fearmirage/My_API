@@ -74,4 +74,15 @@ export class SalesService {
 
         return this.sales[index];
     }
+
+    delete(rank: number){
+        const index = this.sales.findIndex(
+            (sale) => Number(sale.Rank) === rank,
+        );
+        if (index === -1) { return undefined; }
+
+        const deletedGame = this.sales[index];
+        this.sales.splice(index, 1); //Removes one element starting from index
+        return deletedGame;
+    }
 }
