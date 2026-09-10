@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common';
 
 import { SalesService } from './sales.service.js'; //.ts becomes .js locally when ran
+import { CreateGameDto } from './dto/create-game.dto.js';
 
 @Controller('sales')
 export class SalesController {
@@ -29,7 +30,7 @@ export class SalesController {
     }
 
     @Post()
-    addSale(@Body() sale:any){
+    addSale(@Body() sale: CreateGameDto){ //! The CreateGameDto format is expected but not enforced
         return this.salesService.addSale(sale)
     }
 }
