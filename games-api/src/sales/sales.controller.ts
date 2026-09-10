@@ -2,6 +2,7 @@ import {
     Controller,
     Get,
     Post,
+    Patch,
     Param,
     Query,
     Body,
@@ -24,13 +25,18 @@ export class SalesController {
         );
     }
 
-    @Get(':id')
-    findOne(@Param('id') id: string) {
-        return this.salesService.findOne(Number(id));
+    @Get(':rank')
+    findOne(@Param('rank') rank: string) {
+        return this.salesService.findOne(Number(rank));
     }
 
     @Post()
     addSale(@Body() sale: CreateGameDto){ //! The CreateGameDto format is expected but not enforced
         return this.salesService.addSale(sale)
+    }
+
+    @Patch(':rank')
+    update(@Param('rank') rank: string, @Body() updated_game: CreateGameDto){
+        return this.salesService.update(Number(rank),updated_game)
     }
 }

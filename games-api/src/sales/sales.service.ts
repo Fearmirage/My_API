@@ -48,13 +48,30 @@ export class SalesService {
     }
 
     findOne(rank: number) {
-        return this.sales.find(
-        (sales) => sales.rank === rank,
+        console.log(rank)
+        let result = this.sales.find(
+            (sale) => Number(sale.Rank) === rank
         );
+        console.log(result)
+        return result
     }
 
     addSale(sale: any){
         this.sales.push(sale);
         return sale
+    }
+
+    update(rank: number, updatedGame: any) {
+        const index = this.sales.findIndex(
+            (sale) => Number(sale.Rank) === rank,
+        );
+        if (index === -1) { return undefined };
+
+        this.sales[index] = {
+            ...this.sales[index], ...updatedGame
+            // '...' is the spread operator
+        };
+
+        return this.sales[index];
     }
 }
