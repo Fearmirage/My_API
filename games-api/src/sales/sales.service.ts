@@ -50,7 +50,7 @@ export class SalesService {
     }
 
     async findOne(rank: number) { //async allows asynchronous operations with Redis
-        const cacheKey = `games:${rank}`;
+        const cacheKey = `games:${rank}`; // called a template litteral, made using the backtics (`) : allows ${rank} syntax
         //check if redis has the data already
         const cachedResult = await this.redisService.get(cacheKey)
         if (cachedResult){
