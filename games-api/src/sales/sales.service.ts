@@ -3,11 +3,13 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import { parse } from 'csv-parse/sync';
 
+import { RedisService } from '../redis/redis.service.js';
+
 @Injectable()
 export class SalesService {
     private sales: any[];
 
-    constructor() {
+    constructor(private readonly redisService: RedisService) {
         const filePath = join(
             process.cwd(),
             'data',
@@ -47,10 +49,27 @@ export class SalesService {
         };
     }
 
-    findOne(rank: number) {
+    async findOne(rank: number) { //async allows asynchronous operations with Redis
+        const cacheKey = `games:${rank}`;
+        //check if redis has the data already
+        const cachedResult = await this.redisService.get(cacheKey)
+        if (cachedResult){
+            console.log("cache info")
+            return JSON.parse(cachedResult) // return result in the expected format
+        }
+
+        //Not cached, so find it in the data directly
         let result = this.sales.find(
             (sale) => Number(sale.Rank) === rank
         );
+        if(!result){
+            return undefined; // avoids caching undefined
+        }
+        //cache the newly obtained result
+        await this.redisService.set(
+            cacheKey, JSON.stringify(result), 60
+        );
+        console.log("created cache")
         return result
     }
 
