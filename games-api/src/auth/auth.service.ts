@@ -8,7 +8,7 @@ export class AuthService {
         clientId: 'games-admin',
         clientSecret: 'games-secret',
         },
-    ];
+    ]; //for debug while we still don't have a database of users
 
     private tokens: string[] = [];
 

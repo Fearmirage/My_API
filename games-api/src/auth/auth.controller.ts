@@ -16,16 +16,16 @@ export class AuthController {
     createToken(
         @Body()
         body: {
-        grant_type: string;
-        client_id: string;
-        client_secret: string;
+            grant_type: string;
+            client_id: string;
+            client_secret: string;
         }
     )
     {
         if (body.grant_type !== 'client_credentials') {
-        return {
-            error: 'unsupported_grant_type',
-        };
+            return {
+                error: 'unsupported_grant_type',
+            };
         }
 
         return this.authService.createToken(
