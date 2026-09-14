@@ -7,10 +7,12 @@ import {
     Param,
     Query,
     Body,
+    UseGuards,
 } from '@nestjs/common';
 
 import { SalesService } from './sales.service.js'; //.ts becomes .js locally when ran
 import { CreateGameDto } from './dto/create-game.dto.js';
+import { AuthGuard } from '../auth/auth.guard.js';
 
 @Controller('sales')
 export class SalesController {
@@ -31,16 +33,19 @@ export class SalesController {
         return this.salesService.findOne(Number(rank));
     }
 
+    @UseGuards(AuthGuard)
     @Post()
     addSale(@Body() sale: CreateGameDto){ //! The CreateGameDto format is expected but not enforced
         return this.salesService.addSale(sale)
     }
 
+    @UseGuards(AuthGuard)
     @Patch(':rank')
     update(@Param('rank') rank: string, @Body() updated_game: CreateGameDto){
         return this.salesService.update(Number(rank),updated_game)
     }
 
+    @UseGuards(AuthGuard)
     @Delete(':rank')
     delete(@Param('rank') rank: string) {
         return this.salesService.delete(Number(rank))
