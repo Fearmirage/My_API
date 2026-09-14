@@ -48,11 +48,9 @@ export class SalesService {
     }
 
     findOne(rank: number) {
-        console.log(rank)
         let result = this.sales.find(
             (sale) => Number(sale.Rank) === rank
         );
-        console.log(result)
         return result
     }
 
