@@ -22,7 +22,7 @@ export class SalesService {
         });
     }
 
-    findAll(page: number = 1,limit: number = 20) {
+    async findAll(page: number = 1,limit: number = 20) {
         limit = Math.min(limit,20) //max 20 elements per page
         const total = this.sales.length;
         const total_pages = Math.ceil(total/limit);
@@ -33,12 +33,18 @@ export class SalesService {
         } else if (page > total_pages) {
             page = total_pages
         };
+        const cacheKey = `sales:page:${page},limit:${limit}`
+        //check if redis has the data already
+        const cachedResult = await this.redisService.get(cacheKey)
+        if (cachedResult){
+            console.log("cache info")
+            return JSON.parse(cachedResult) // return result in the expected format
+        }
+        //Not cached, so find it in the data directly
         const start = (page - 1) * limit;
         const end = start + limit;
-
         const data = this.sales.slice(start, end);
-
-        return {
+        const result = {
             data,
             pagination: {
                 page,
@@ -47,10 +53,15 @@ export class SalesService {
                 total_pages
             }
         };
+        await this.redisService.set(
+            cacheKey, JSON.stringify(result), 60
+        );
+        console.log("created cache")
+        return result
     }
 
     async findOne(rank: number) { //async allows asynchronous operations with Redis
-        const cacheKey = `games:${rank}`; // called a template litteral, made using the backtics (`) : allows ${rank} syntax
+        const cacheKey = `sales:${rank}`; // called a template litteral, made using the backtics (`) : allows ${rank} syntax
         //check if redis has the data already
         const cachedResult = await this.redisService.get(cacheKey)
         if (cachedResult){
@@ -73,12 +84,13 @@ export class SalesService {
         return result
     }
 
-    addSale(sale: any){
+    async addSale(sale: any){
         this.sales.push(sale);
+        await this.redisService.flushAll(); //data updated -> reset outdated cache
         return sale
     }
 
-    update(rank: number, updatedGame: any) {
+    async update(rank: number, updatedGame: any) {
         const index = this.sales.findIndex(
             (sale) => Number(sale.Rank) === rank,
         );
@@ -88,11 +100,11 @@ export class SalesService {
             ...this.sales[index], ...updatedGame
             // '...' is the spread operator
         };
-
+        await this.redisService.flushAll(); //data updated -> reset outdated cache
         return this.sales[index];
     }
 
-    delete(rank: number){
+    async delete(rank: number){
         const index = this.sales.findIndex(
             (sale) => Number(sale.Rank) === rank,
         );
@@ -100,6 +112,8 @@ export class SalesService {
 
         const deletedGame = this.sales[index];
         this.sales.splice(index, 1); //Removes one element starting from index
+
+        await this.redisService.flushAll(); //data updated -> reset outdated cache
         return deletedGame;
     }
 }

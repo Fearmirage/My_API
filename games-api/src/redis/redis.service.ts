@@ -25,6 +25,10 @@ export class RedisService implements OnModuleDestroy {
         return this.redis.del(key);
     }
 
+    async flushAll() {
+        return this.redis.flushall()
+    }
+
     async onModuleDestroy() {
         await this.redis.quit(); // quits redis when NestJS shuts down
     }
