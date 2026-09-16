@@ -3,6 +3,10 @@ import {
     Controller,
     Post,
 } from '@nestjs/common';
+import {
+  ApiBody,
+  ApiResponse,
+} from '@nestjs/swagger';
 
 import { AuthService } from './auth.service.js';
 
@@ -12,6 +16,34 @@ export class AuthController {
         private readonly authService: AuthService,
     ) {}
 
+
+    @ApiBody({ // Metadata for Swagger
+        schema: {
+            type: 'object',
+            properties: {
+            grant_type: {
+                type: 'string',
+                example: 'client_credentials',
+            },
+            client_id: {
+                type: 'string',
+                example: 'games-admin',
+            },
+            client_secret: {
+                type: 'string',
+                example: 'games-secret',
+            },
+            },
+        },
+    })
+    @ApiResponse({ // Metadata for Swagger
+        status: 200,
+        description: 'OAuth access token generated successfully.',
+    })
+    @ApiResponse({ // Metadata for Swagger
+        status: 401,
+        description: 'Invalid client credentials.',
+    })
     @Post('token')
     createToken(
         @Body()
