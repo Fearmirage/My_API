@@ -29,13 +29,13 @@ export class SalesService {
         //Math.ceil(number) returns smallest integer greater than or equal to given number
         //Prevent invalid page numbers
         if (page < 1){
-            page = 1
+            page = 1;
         } else if (page > totalPages) {
-            page = totalPages
+            page = totalPages;
         };
-        const cacheKey = `sales:page:${page},limit:${limit}`
+        const cacheKey = `sales:page:${page},limit:${limit}`;
         //check if redis has the data already
-        const cachedResult = await this.redisService.get(cacheKey)
+        const cachedResult = await this.redisService.get(cacheKey);
         if (cachedResult){
             console.log("cache info")
             return JSON.parse(cachedResult) // return result in the expected format

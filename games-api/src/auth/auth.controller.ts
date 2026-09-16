@@ -1,7 +1,7 @@
 import {
-Body,
-Controller,
-Post,
+    Body,
+    Controller,
+    Post,
 } from '@nestjs/common';
 
 import { AuthService } from './auth.service.js';

@@ -1,4 +1,7 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+    Injectable,
+    UnauthorizedException
+} from '@nestjs/common';
 import { randomBytes } from 'crypto';
 
 @Injectable()
