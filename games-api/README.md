@@ -49,7 +49,3 @@ Administrative endpoints require a Bearer access token obtained through the OAut
 ## Dataset
 
 The API uses a video game sales CSV dataset. Data modifications are currently stored in memory and are lost when the application restarts.
-
-## License
-
-Add the license applicable to this project, if one has been chosen.
