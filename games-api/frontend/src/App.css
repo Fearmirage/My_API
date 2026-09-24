@@ -116,3 +116,70 @@ button:disabled {
   padding: 24px;
   color: #b91c1c;
 }
+
+
+.detail-section {
+  padding: 24px;
+}
+
+.back-button {
+  margin-bottom: 24px;
+}
+
+.game-details h1 {
+  margin-bottom: 24px;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 12px 20px;
+  margin: 0;
+}
+
+.details-grid dt {
+  color: #64748b;
+  font-weight: 600;
+}
+
+.details-grid dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 480px) {
+  .details-grid {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .details-grid dd {
+    margin-bottom: 12px;
+  }
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 400px;
+}
+
+.login-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.games-section td button {
+  background: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.games-section td button:hover {
+  background: #b91c1c;
+}
