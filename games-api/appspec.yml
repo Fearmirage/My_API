@@ -1,0 +1,17 @@
+version: 0.0
+os: linux
+
+files:
+  - source: /
+    destination: /home/ec2-user/games-api
+
+hooks:
+  ApplicationStop:
+    - location: scripts/stop.sh
+      timeout: 30
+      runas: root
+
+  ApplicationStart:
+    - location: scripts/start.sh
+      timeout: 30
+      runas: root
