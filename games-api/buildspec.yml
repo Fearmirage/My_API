@@ -1,0 +1,24 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 24
+    commands:
+      - cd My_API/games-api
+      - npm ci
+
+  build:
+    commands:
+      - cd My_API/games-api
+      - npm test
+      - npm run build
+
+artifacts:
+  base-directory: My_API/games-api
+  files:
+    - dist/**/*
+    - data/**/*
+    - package.json
+    - package-lock.json
+    - Procfile
