@@ -1,0 +1,42 @@
+name: Build and Deploy Games API
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build-and-deploy:
+    runs-on: self-hosted
+
+    defaults:
+      run:
+        working-directory: My_API/games-api
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: My_API/games-api/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build application
+        run: npm run build
+
+      - name: Install production dependencies
+        run: npm ci --omit=dev
+
+      - name: Restart application
+        run: |
+          pkill -f "node dist/main" || true
+          nohup npm run start:prod > /tmp/games-api.log 2>&1 &
