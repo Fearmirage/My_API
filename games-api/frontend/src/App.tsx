@@ -49,7 +49,7 @@ function App() {
     setLoginError('')
 
     try {
-      const response = await fetch('http://localhost:3000/oauth/token', {
+      const response = await fetch('/oauth/token', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -91,7 +91,7 @@ function App() {
     }
 
     try {
-      const response = await fetch(`http://localhost:3000/sales/${rank}`, {
+      const response = await fetch(`/sales/${rank}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -129,7 +129,7 @@ function App() {
 
       try {
         const response = await fetch( // HTTP GET to the backend
-          `http://localhost:3000/sales?page=${page}&limit=20` // template litteral
+          `/sales?page=${page}&limit=20` // template litteral
         )
 
         if (!response.ok) { // Not a response in the successful range -> backend is encountering a problem
@@ -167,7 +167,7 @@ function App() {
 
       try {
         const response = await fetch(
-          `http://localhost:3000/sales/${selectedRank}`
+          `/sales/${selectedRank}`
         )
 
         if (!response.ok) {
