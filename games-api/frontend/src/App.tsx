@@ -40,6 +40,23 @@ function App() {
   const [loginError, setLoginError] = useState('')
   const [loginLoading, setLoginLoading] = useState(false)
 
+  const emptyGame: Game = {
+    Rank: '',
+    Name: '',
+    Platform: '',
+    Year: '',
+    Genre: '',
+    Publisher: '',
+    Global_Sales: '',
+  }
+
+  const [formGame, setFormGame] = useState<Game>(emptyGame)
+  const [formMode, setFormMode] = useState<'create' | 'update' | null>(null)
+  const [formError, setFormError] = useState('')
+  const [formLoading, setFormLoading] = useState(false)
+
+  const [refreshKey, setRefreshKey] = useState(0)
+
   function openGame(rank: string) {
     setSelectedRank(rank)
   }
@@ -148,7 +165,7 @@ function App() {
     }
 
     fetchGames()
-  }, [page]) // [page] is called a Dependency array :
+  }, [page, refreshKey]) // [page] is called a Dependency array :
   // It tells React to run this effect when the component first appears and again when it changes.
 
   /**
