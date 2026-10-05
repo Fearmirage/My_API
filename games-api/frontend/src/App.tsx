@@ -127,6 +127,8 @@ function App() {
       // If the deleted game is currently open, return to the list.
       if (selectedRank === rank) {
         setSelectedRank(null)
+      }else { // Otherwise, refresh list
+        setRefreshKey((current) => current + 1)
       }
     } catch (error) {
       window.alert(
@@ -134,6 +136,72 @@ function App() {
       )
     }
   }
+
+  function startCreate() {
+    setFormGame(emptyGame)
+    setFormError('')
+    setFormMode('create')
+  }
+
+  function startUpdate(game: Game) {
+    setFormGame({ ...game }) // ' ...games ' creates a copy of ' game '
+    setFormError('')
+    setFormMode('update')
+  }
+
+
+  async function handleSaveGame(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+
+    if (accessToken === null) {
+      return
+    }
+
+    setFormLoading(true)
+    setFormError('')
+
+    try {
+      const isUpdate = formMode === 'update'
+
+      const response = await fetch(
+        isUpdate ? `/sales/${formGame.Rank}` : '/sales',
+        {
+          method: isUpdate ? 'PATCH' : 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify(formGame),
+        },
+      )
+
+      const result = await response.json()
+
+      if (!response.ok) {
+        throw new Error(
+          result.error || result.message || 'Failed to save game',
+        )
+      }
+
+      setFormGame(emptyGame)
+      setFormMode(null)
+
+      setRefreshKey((current) => current + 1)
+
+      // If we were editing the currently selected game,
+      // close the detail view so the refreshed data is shown.
+      if (isUpdate && selectedRank === formGame.Rank) {
+        setSelectedRank(null)
+      }
+    } catch (error) {
+      setFormError(
+        error instanceof Error ? error.message : 'Something went wrong',
+      )
+    } finally {
+      setFormLoading(false)
+    }
+  }
+
 
   /**
    * Browse all games
@@ -314,6 +382,148 @@ function App() {
           )}
         </section>
 
+        {accessToken !== null && ( //Form for Updating and Creating
+          <section className="admin-section">
+            <div className="section-heading">
+              <h2>
+                {formMode === 'update' ? 'Edit Game' : 'Add Game'}
+              </h2>
+
+              {formMode === null && (
+                <button onClick={startCreate}>
+                  Add Game
+                </button>
+              )}
+            </div>
+
+            {formMode !== null && (
+              <form className="game-form" onSubmit={handleSaveGame}>
+                <label>
+                  Rank
+                  <input
+                    value={formGame.Rank}
+                    onChange={(event) =>
+                      setFormGame({
+                        ...formGame,
+                        Rank: event.target.value,
+                      })
+                    }
+                    disabled={formMode === 'update'}
+                    required
+                  />
+                </label>
+
+                <label>
+                  Name
+                  <input
+                    value={formGame.Name}
+                    onChange={(event) =>
+                      setFormGame({
+                        ...formGame,
+                        Name: event.target.value,
+                      })
+                    }
+                    required
+                  />
+                </label>
+
+                <label>
+                  Platform
+                  <input
+                    value={formGame.Platform}
+                    onChange={(event) =>
+                      setFormGame({
+                        ...formGame,
+                        Platform: event.target.value,
+                      })
+                    }
+                    required
+                  />
+                </label>
+
+                <label>
+                  Year
+                  <input
+                    value={formGame.Year}
+                    onChange={(event) =>
+                      setFormGame({
+                        ...formGame,
+                        Year: event.target.value,
+                      })
+                    }
+                  />
+                </label>
+
+                <label>
+                  Genre
+                  <input
+                    value={formGame.Genre}
+                    onChange={(event) =>
+                      setFormGame({
+                        ...formGame,
+                        Genre: event.target.value,
+                      })
+                    }
+                    required
+                  />
+                </label>
+
+                <label>
+                  Publisher
+                  <input
+                    value={formGame.Publisher}
+                    onChange={(event) =>
+                      setFormGame({
+                        ...formGame,
+                        Publisher: event.target.value,
+                      })
+                    }
+                    required
+                  />
+                </label>
+
+                <label>
+                  Global Sales (M)
+                  <input
+                    value={formGame.Global_Sales}
+                    onChange={(event) =>
+                      setFormGame({
+                        ...formGame,
+                        Global_Sales: event.target.value,
+                      })
+                    }
+                    required
+                  />
+                </label>
+
+                {formError && (
+                  <p className="error">{formError}</p>
+                )}
+
+                <div className="form-actions">
+                  <button type="submit" disabled={formLoading}>
+                    {formLoading
+                      ? 'Saving...'
+                      : formMode === 'update'
+                        ? 'Update Game'
+                        : 'Create Game'}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFormMode(null)
+                      setFormError('')
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            )}
+          </section>
+        )}
+
         <section className="games-section">
           <div className="section-heading">
             <h2>Games</h2>
@@ -357,14 +567,25 @@ function App() {
                         <td>{game.Global_Sales}</td>
                         <td>
                           {accessToken !== null && (
-                            <button
-                              onClick={(event) => {
-                                event.stopPropagation()
-                                handleDelete(game.Rank)
-                              }}
-                            >
-                              Delete
-                            </button>
+                            <>
+                              <button
+                                onClick={(event) => {
+                                  event.stopPropagation()
+                                  startUpdate(game)
+                                }}
+                              >
+                                Edit
+                              </button>
+
+                              <button
+                                onClick={(event) => {
+                                  event.stopPropagation()
+                                  handleDelete(game.Rank)
+                                }}
+                              >
+                                Delete
+                              </button>
+                            </>
                           )}
                         </td>
                       </tr>
