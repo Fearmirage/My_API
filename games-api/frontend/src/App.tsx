@@ -26,6 +26,7 @@ function App() {
   const [games, setGames] = useState<Game[]>([])    // What is shown on the page. Init as an empty array of type Games
   const [page, setPage] = useState(1)               // The page it is at.
   const [totalPages, setTotalPages] = useState(1)   // The total pages
+  const [pageInput, setPageInput] = useState('')
   const [loading, setLoading] = useState(true)      // Bool of 'Are we loading?'. Init as true
   const [error, setError] = useState('')            // String detailing an error if it occurs.
 
@@ -59,6 +60,23 @@ function App() {
 
   function openGame(rank: string) {
     setSelectedRank(rank)
+  }
+
+  function goToPage(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+
+    const requestedPage = Number(pageInput)
+
+    if (
+      !Number.isInteger(requestedPage) ||
+      requestedPage < 1 ||
+      requestedPage > totalPages
+    ) {
+      return
+    }
+
+    setPage(requestedPage)
+    setPageInput('')
   }
 
   async function handleLogin() {
@@ -597,16 +615,33 @@ function App() {
               <div className="pagination">
                 <button
                   onClick={() => setPage(page - 1)}
-                  disabled={page <= 1} // Disabled on the first page one to avoid errors
+                  disabled={page <= 1}
                 >
                   Previous
                 </button>
 
-                <span>Page {page} of {totalPages}</span>
+                <span>
+                  Page {page} of {totalPages}
+                </span>
+
+                <form onSubmit={goToPage}>
+                  <input
+                    type="number"
+                    min="1"
+                    max={totalPages}
+                    value={pageInput}
+                    onChange={(event) => setPageInput(event.target.value)}
+                    placeholder="Page"
+                  />
+
+                  <button type="submit">
+                    Go
+                  </button>
+                </form>
 
                 <button
                   onClick={() => setPage(page + 1)}
-                  disabled={page >= totalPages} // Disabled on the last page to avoid errors
+                  disabled={page >= totalPages}
                 >
                   Next
                 </button>
