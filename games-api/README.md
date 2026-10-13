@@ -37,6 +37,24 @@ npm run start:dev
 The API will be available at:
 `http://localhost:3000`
 
+## Running the backend locally for ubuntu (Requires SSH private key)
+
+Connect to the EC2 instance via SSH:
+
+```bash
+ssh -i ~/KEY_PATH/KEY_NAME.pem ubuntu@PUBLIC_EC2_IP
+```
+
+Start Nest JS:
+
+```bash
+cd ~/actions-runner/_work/My_API/My_API/games-api
+npm run start:prod
+```
+
+The API will be available at
+`https://51.44.167.218`
+
 ## API Documentation
 
 * Swagger: `http://localhost:3000/api`
