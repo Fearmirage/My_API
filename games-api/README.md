@@ -42,7 +42,7 @@ The API will be available at:
 Connect to the EC2 instance via SSH:
 
 ```bash
-ssh -i ~/KEY_PATH/KEY_NAME.pem ubuntu@PUBLIC_EC2_IP
+ssh -i ~/KEY_PATH/KEY_NAME.pem ubuntu@51.44.167.218
 ```
 
 Start Nest JS:
