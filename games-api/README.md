@@ -57,6 +57,22 @@ The API will be available at
 
 Note: The backend runs on the remote EC2 instance, not on your local machine. Keep the SSH session open while running the backend.
 
+## Running the Github Actions self-hosted runner
+
+Connect to the EC2 instance via SSH:
+
+```bash
+ssh -i ~/KEY_PATH/KEY_NAME.pem ubuntu@51.44.167.218
+```
+
+Start the Github Actions self-hosted runner
+```bash
+cd ~/actions-runner
+./run.sh
+```
+
+Keep the terminal session open while the runner is active.
+
 ## API Documentation
 
 * Swagger: `http://localhost:3000/api`
