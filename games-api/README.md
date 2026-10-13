@@ -37,7 +37,7 @@ npm run start:dev
 The API will be available at:
 `http://localhost:3000`
 
-## Running the backend locally for ubuntu (Requires SSH private key)
+## Running the backend on EC2 (Requires SSH private key)
 
 Connect to the EC2 instance via SSH:
 
@@ -54,6 +54,8 @@ npm run start:prod
 
 The API will be available at
 `https://51.44.167.218`
+
+Note: The backend runs on the remote EC2 instance, not on your local machine. Keep the SSH session open while running the backend.
 
 ## API Documentation
 
